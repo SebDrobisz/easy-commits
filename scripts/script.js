@@ -1,3 +1,5 @@
+let tableIndex = 1;
+
 function getProjectName(matricule) {
     return `web2-${matricule}-projet`;
 }
@@ -31,7 +33,10 @@ function loadPae() {
 
 const loadBtnEl = document.querySelector("#load-btn");
 loadBtnEl.addEventListener("click", () => {
+    tableIndex = 1;
     document.querySelector("#resume-table>tbody").textContent = '';
+
+
     const ue = ueSelectEl.value;
     const group = groupSelectEl.value;
     
@@ -51,9 +56,10 @@ loadBtnEl.addEventListener("click", () => {
     });
 });
 
-const tableEl = document.querySelector("tbody");
-const template = document.querySelector("#template-row");
-let index = 1;
+const tableEl = document.querySelector("#resume-table tbody");
+const resumeRowTemplate = document.querySelector("#template-row");
+const detailRowTemplate = document.querySelector("#template-details-row");
+
 
 function getCommitsData(projectId, student) {
     getCommits(projectId, student)
@@ -65,9 +71,11 @@ function addData(student, commits) {
     const date = new Date(committed_date)
         .toLocaleString('fr-BE', { });
 
-    aRow = template.content.cloneNode(true);
-    aRow.querySelector(".index").textContent = index++;
-    aRow.querySelector(".student").textContent = student;
+    const aRow = resumeRowTemplate.content.cloneNode(true);
+    aRow.querySelector(".index").textContent = tableIndex++;
+    const studentEl = aRow.querySelector(".student");
+    studentEl.addEventListener("click", () => showStudentCommits(student, commits));
+    studentEl.textContent = student;
     aRow.querySelector(".nbCommits").textContent = commits.length;
     aRow.querySelector(".date").textContent = date;
     aRow.querySelector(".title").textContent = title;
@@ -75,22 +83,39 @@ function addData(student, commits) {
     tableEl.appendChild(aRow);
 }
 
-
-// token
-
-document.querySelector("#token-input").addEventListener("focusout", () => {
-    getToken();
-
-    loadPae();
-});
-
 function initTokenInput() {
     if ("token" in localStorage) {
         tokenElement().value = localStorage.getItem("token");
+        loadPae();
     }
     tokenElement().addEventListener("focusout", () => {
         localStorage.setItem("token", tokenElement().value);
+        loadPae();
     });
 }
 
 initTokenInput();
+
+function showStudentCommits(student, commits) {
+
+    const tableEl = document.querySelector('#details-table');
+    const body = tableEl.querySelector("tbody");
+    body.textContent = '';
+    
+    document.querySelector("#student-mat").textContent = student;
+    tableEl.classList.remove('invisible');
+
+    commits.forEach((commit, index) => {
+        const {committed_date, title} = commit;
+        
+        const date = new Date(committed_date)
+            .toLocaleString('fr-BE', { });
+
+        const aRow = resumeRowTemplate.content.cloneNode(true);
+        aRow.querySelector(".index").textContent = index + 1;
+        aRow.querySelector(".date").textContent = date
+        aRow.querySelector(".title").textContent = title;
+        aRow.querySelector(".title").setAttribute("href", commit.web_url);
+        body.appendChild(aRow);
+    });
+}

@@ -19,13 +19,10 @@
 <body>
     <h1>Dashboard</h1>
 
-    <form>
+    <form >
         <div class="form-group">
           <label for="token-input">Token</label>
-          <input type="text" class="form-control" id="token-input" placeholder="Enter token">
-          <div class="invalid-feedback">
-            Le token n'est pas valide
-          </div>
+          <input type="text" class="form-control" id="token-input" placeholder="Enter token" required>
           <small id="tokenHelp" class="form-text text-muted">Créez votre token <a href="https://git.esi-bru.be/-/profile/personal_access_tokens">ici</a>.</small>
         </div>
         <div class="form-group">
@@ -41,18 +38,52 @@
         <button id="load-btn" type="button" class="btn btn-outline-dark">Charger</button>
     </form>
 
+    <!-- <nav style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Groupes</li>
+            <li class="breadcrumb-item active">étudiant</li>
+        </ol>
+    </nav>       -->
+
     <table id="resume-table" class="table table-sm table-striped table-hover">
         <thead>
-            <th scope=row>index</th>
-            <th scope="row">matricule</th>
-            <th scope="row">nb commits</th>
-            <th scope="row">date dernier commit</th>
-            <th scope="row">titre dernier commit</th>
+            <tr>
+                <th scope=row>index</th>
+                <th scope="row">matricule</th>
+                <th scope="row">nb commits</th>
+                <th scope="row">date dernier commit</th>
+                <th scope="row">titre dernier commit</th>
+            </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
     
+    
+    <table id="details-table" class="invisible table table-sm table-striped table-hover">
+        <thead>
+            <tr >
+                <th scope="row" class="text-center fs-2" colspan="3" id="student-mat">45231</td>
+            </tr>
+            <tr>
+                <th scope=row>index</th>
+                <th scope="row">date</th>
+                <th scope="row">titre du commit</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <template id="template-details-row">
+        <tr>
+            <th scope="row" class="index"></th>
+            <td class="date"></td>
+            <td class="title"></td>
+        </tr>
+    </template>
+
+
     <template id="template-row">
         <tr>
             <th scope="row" class="index"></th>
