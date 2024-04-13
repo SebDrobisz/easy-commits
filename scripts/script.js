@@ -35,6 +35,7 @@ const loadBtnEl = document.querySelector("#load-btn");
 loadBtnEl.addEventListener("click", () => {
     tableIndex = 1;
     document.querySelector("#resume-table>tbody").textContent = '';
+    resetDetailsTable();
 
 
     const ue = ueSelectEl.value;
@@ -111,11 +112,17 @@ function showStudentCommits(student, commits) {
         const date = new Date(committed_date)
             .toLocaleString('fr-BE', { });
 
-        const aRow = resumeRowTemplate.content.cloneNode(true);
-        aRow.querySelector(".index").textContent = index + 1;
+        const aRow = detailRowTemplate.content.cloneNode(true);
+        aRow.querySelector(".index").textContent = commits.length - index;
         aRow.querySelector(".date").textContent = date
         aRow.querySelector(".title").textContent = title;
         aRow.querySelector(".title").setAttribute("href", commit.web_url);
         body.appendChild(aRow);
     });
+}
+
+function resetDetailsTable() {
+    const tableEl = document.querySelector("#details-table");
+    tableEl.querySelector("tbody").textContent = '';
+    tableEl.classList.add('invisible');
 }
