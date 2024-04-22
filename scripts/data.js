@@ -27,7 +27,7 @@ function ues() {
 }
 
 function ueGroups(ue) {
-    return new Set(data.filter(d => d[0] == ue).map(d => d[1]))
+    return [...new Set(data.filter(d => d[0] == ue).map(d => d[1]))].sort();
 }
 
 // const students = [
