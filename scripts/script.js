@@ -92,17 +92,18 @@ function addData(student, commits) {
     const studentEl = aRow.querySelector(".student");
     studentEl.addEventListener("click", () => showStudentCommits(student, commits));
     studentEl.textContent = student;
-    commits.forEach(c => {
+    const alert = commits.some(c => {
         const {author_email} = c;
         const author = author_email.split('@')[0].replace('g', '');
         
-        if (author != student) {
-            studentEl
+        return author != student;        
+    });
+    
+    if (alert) {
+        studentEl
                 .parentElement
                 .parentElement.classList.add('table-warning');
-            console.log(`alerte ${student}`);
-        }
-    });
+    }
 
 
 
