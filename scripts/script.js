@@ -82,14 +82,30 @@ function getCommitsData(projectId, student) {
 
 function addData(student, commits) {
     const {committed_date, title} = commits[0];
+
     const date = new Date(committed_date)
         .toLocaleString('fr-BE', { });
 
     const aRow = resumeRowTemplate.content.cloneNode(true);
     aRow.querySelector(".index").textContent = tableIndex++;
+
     const studentEl = aRow.querySelector(".student");
     studentEl.addEventListener("click", () => showStudentCommits(student, commits));
     studentEl.textContent = student;
+    commits.forEach(c => {
+        const {author_email} = c;
+        const author = author_email.split('@')[0].replace('g', '');
+        
+        if (author != student) {
+            studentEl
+                .parentElement
+                .parentElement.classList.add('table-warning');
+            console.log(`alerte ${student}`);
+        }
+    });
+
+
+
     aRow.querySelector(".nbCommits").textContent = commits.length;
     aRow.querySelector(".date").textContent = date;
     aRow.querySelector(".title").textContent = title;
@@ -120,7 +136,7 @@ function showStudentCommits(student, commits) {
     tableEl.classList.remove('invisible');
 
     commits.forEach((commit, index) => {
-        const {committed_date, title} = commit;
+        const {committed_date, title, author_email} = commit;
         
         const date = new Date(committed_date)
             .toLocaleString('fr-BE', { });
@@ -130,6 +146,7 @@ function showStudentCommits(student, commits) {
         aRow.querySelector(".date").textContent = date
         aRow.querySelector(".title").textContent = title;
         aRow.querySelector(".title").setAttribute("href", commit.web_url);
+        aRow.querySelector('.author').textContent = author_email;
         body.appendChild(aRow);
     });
 }
