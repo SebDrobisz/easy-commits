@@ -10,6 +10,17 @@ const ueSelectEl = document.querySelector("#ue-select");
 //     console.log(groupSelectEl.value);
 // });
 
+function getPath() {
+    return document.querySelector('#path-input').value
+        .replace(/\s/g,"") // remove spaces
+        .replace(/\/$/, "") // remove trailing /
+        .replace(/^\//, ""); // remove first /;
+}
+
+function getProjectNameTemplate() {
+    return document.querySelector('#repo-name').value;
+}
+
 function loadPae() {
     fetchPAE().then(d => {
         data = d.pae;
@@ -40,12 +51,14 @@ loadBtnEl.addEventListener("click", () => {
 
     const ue = ueSelectEl.value;
     const group = groupSelectEl.value;
+    const path = getPath();
+    const projectNameTemplate = getProjectNameTemplate();
     
     const students = getMatricules(ue, group);
 
     students.forEach(e => {
-        const projectName = `web2-${e}-projet`;
-        findProject("2023-2024/web2/projet", projectName)
+        const projectName = projectNameTemplate.replace('xxxxx', e);
+        findProject(path, projectName)
             .then(p => {
                 if (!p) {
                     console.log(`projet ${projectName} n'a pas été trouvé`);
